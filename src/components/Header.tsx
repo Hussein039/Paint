@@ -42,12 +42,12 @@ const Header = () => {
             >
               Portfolio
             </button>
-            <button 
+            {/* <button 
               onClick={() => scrollToSection('about')}
               className="text-foreground hover:text-accent transition-colors"
             >
               About
-            </button>
+            </button> */}
             <button 
               onClick={() => scrollToSection('contact')}
               className="text-foreground hover:text-accent transition-colors"
