@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+// ----- Your Projects Data -----
 const featuredProjects = [
   {
     image: "/lovable-uploads/80777084-87b4-45e0-8db5-38c1f5e41b60.png",
@@ -26,7 +27,7 @@ const featuredProjects = [
     description: "Sophisticated gray cabinets with contemporary styling",
   },
   {
-    image: "/lovable-uploads/9bd92193-000d-4957-af74-9635a68bfb74.png",
+    image: "/public/lovable-uploads/image_29.jpg",
     title: "Curved Staircase Feature",
     category: "Interior",
     description: "Elegant curved design with white railings and wood floors",
@@ -39,19 +40,50 @@ const featuredProjects = [
   },
 ];
 
-const extraProjects = Array.from({ length: 11 }, (_, i) => ({
-  image: `/lovable-uploads/${i + 1}.jpeg`,
-  title: `Premium Interior Design ${i + 1}`,
+const extraProjects = Array.from({ length: 38 }, (_, i) => ({
+  image: `/lovable-uploads/image_${i + 1}.jpg`,
   category: "Interior",
   description: `Professional painting and finishing project showcasing quality craftsmanship`,
 }));
 
 const allProjects = [...featuredProjects, ...extraProjects];
 
+// ----- Component -----
 const Portfolio: React.FC = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [enlargedIndex, setEnlargedIndex] = useState<number | null>(null);
 
+  // Secret admin login
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [adminPass, setAdminPass] = useState("");
+  const [keyBuffer, setKeyBuffer] = useState("");
+
+  // Detect secret code typed anywhere
+  useEffect(() => {
+    const handleSecretKeys = (e: KeyboardEvent) => {
+      const newBuffer = (keyBuffer + e.key).slice(-20);
+      setKeyBuffer(newBuffer);
+      if (newBuffer.toLowerCase().includes("admin12321".toLowerCase())) {
+        setShowAdminLogin(true);
+        setKeyBuffer("");
+      }
+    };
+    window.addEventListener("keydown", handleSecretKeys);
+    return () => window.removeEventListener("keydown", handleSecretKeys);
+  }, [keyBuffer]);
+
+  // Handle admin login (frontend only)
+  const handleLogin = () => {
+    if (adminPass === "mySecretPass") {
+      alert("✅ Logged in as Admin");
+      setShowAdminLogin(false);
+      setAdminPass("");
+    } else {
+      alert("❌ Wrong password");
+    }
+  };
+
+  // Image viewer keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (enlargedIndex === null) return;
@@ -60,49 +92,47 @@ const Portfolio: React.FC = () => {
       } else if (e.key === "ArrowRight") {
         setEnlargedIndex((enlargedIndex + 1) % allProjects.length);
       } else if (e.key === "ArrowLeft") {
-        setEnlargedIndex((enlargedIndex - 1 + allProjects.length) % allProjects.length);
+        setEnlargedIndex(
+          (enlargedIndex - 1 + allProjects.length) % allProjects.length
+        );
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [enlargedIndex]);
 
+  // Prevent body scroll when dialogs open
   useEffect(() => {
-    if (dialogOpen || enlargedIndex !== null) {
+    if (dialogOpen || enlargedIndex !== null || showAdminLogin) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
-  }, [dialogOpen, enlargedIndex]);
-
-  const openFullscreen = (index: number) => setEnlargedIndex(index);
-  const closeFullscreen = () => setEnlargedIndex(null);
-  const nextImage = () => {
-    if (enlargedIndex === null) return;
-    setEnlargedIndex((enlargedIndex + 1) % allProjects.length);
-  };
-  const prevImage = () => {
-    if (enlargedIndex === null) return;
-    setEnlargedIndex((enlargedIndex - 1 + allProjects.length) % allProjects.length);
-  };
+  }, [dialogOpen, enlargedIndex, showAdminLogin]);
 
   return (
     <section id="portfolio" className="py-20 bg-white text-gray-900">
       <div className="container mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Our Recent Work</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            Our Recent Work
+          </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Take a look at some of our completed projects showcasing quality craftsmanship and attention to detail in every finish.
+            Take a look at some of our completed projects showcasing quality
+            craftsmanship and attention to detail in every finish.
           </p>
         </div>
 
         {/* Featured Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="featured-grid">
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          id="featured-grid"
+        >
           {featuredProjects.map((project, idx) => (
             <div
               key={idx}
-              onClick={() => openFullscreen(idx)}
+              onClick={() => setEnlargedIndex(idx)}
               className="group overflow-hidden shadow-soft hover:shadow-large transition-all duration-500 hover:-translate-y-2 cursor-pointer rounded-lg"
             >
               <div className="relative overflow-hidden rounded-lg">
@@ -117,7 +147,9 @@ const Portfolio: React.FC = () => {
                 </span>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{project.title}</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  {project.title}
+                </h3>
                 <p className="text-gray-600">{project.description}</p>
               </div>
             </div>
@@ -137,7 +169,7 @@ const Portfolio: React.FC = () => {
           </button>
         </div>
 
-        {/* Dialog for all projects */}
+        {/* All Projects Dialog */}
         {dialogOpen && (
           <div
             onClick={() => setDialogOpen(false)}
@@ -148,15 +180,22 @@ const Portfolio: React.FC = () => {
               className="bg-white w-full max-w-6xl max-h-[85vh] rounded-lg shadow-lg flex flex-col"
             >
               <div className="sticky top-0 bg-white z-10 p-6 border-b">
-                <h3 className="text-2xl font-bold">Complete Portfolio ({allProjects.length} Projects)</h3>
-                <p className="text-gray-600 mt-2">Click on any image to view in full screen</p>
+                <h3 className="text-2xl font-bold">
+                  Complete Portfolio ({allProjects.length} Projects)
+                </h3>
+                <p className="text-gray-600 mt-2">
+                  Click on any image to view in full screen
+                </p>
               </div>
               <div className="overflow-y-auto flex-1 p-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="all-grid">
+                <div
+                  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                  id="all-grid"
+                >
                   {allProjects.map((project, idx) => (
                     <div
                       key={idx}
-                      onClick={() => openFullscreen(idx)}
+                      onClick={() => setEnlargedIndex(idx)}
                       className="rounded-lg overflow-hidden shadow-md cursor-pointer hover:shadow-lg transition-shadow group"
                     >
                       <div className="relative overflow-hidden rounded-lg">
@@ -172,7 +211,9 @@ const Portfolio: React.FC = () => {
                         </div>
                       </div>
                       <div className="p-3">
-                        <h4 className="text-sm font-semibold truncate">{project.title}</h4>
+                        <h4 className="text-sm font-semibold truncate">
+                          {project.title}
+                        </h4>
                         <span className="mt-1 text-xs inline-block bg-gray-200 rounded px-2 py-0.5 text-gray-600">
                           {project.category}
                         </span>
@@ -187,58 +228,83 @@ const Portfolio: React.FC = () => {
 
         {/* Fullscreen Viewer */}
         {enlargedIndex !== null && (
-  <div
-    onClick={() => setEnlargedIndex(null)}
-    className="fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center z-[99999] cursor-zoom-out p-4"
-  >
-    <button
-      onClick={(e) => {
-        e.stopPropagation();
-        setEnlargedIndex(null);
-      }}
-      title="Close (Esc)"
-      className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors z-[100000] flex items-center justify-center text-xl font-bold"
-    >
-      ×
-    </button>
-    <button
-      onClick={(e) => {
-        e.stopPropagation();
-        prevImage();
-      }}
-      title="Previous (←)"
-      className="absolute left-2 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-all z-[100000] flex items-center justify-center text-2xl font-bold shadow-lg border border-white/20"
-    >
-      ‹
-    </button>
-    <button
-      onClick={(e) => {
-        e.stopPropagation();
-        nextImage();
-      }}
-      title="Next (→)"
-      className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-all z-[100000] flex items-center justify-center text-2xl font-bold shadow-lg border border-white/20"
-    >
-      ›
-    </button>
+          <div
+            onClick={() => setEnlargedIndex(null)}
+            className="fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center z-[99999] cursor-zoom-out p-4"
+          >
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setEnlargedIndex(null);
+              }}
+              title="Close (Esc)"
+              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors z-[100000] flex items-center justify-center text-xl font-bold"
+            >
+              ×
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setEnlargedIndex(
+                  (enlargedIndex - 1 + allProjects.length) % allProjects.length
+                );
+              }}
+              title="Previous (←)"
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-all z-[100000] flex items-center justify-center text-2xl font-bold shadow-lg border border-white/20"
+            >
+              ‹
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setEnlargedIndex((enlargedIndex + 1) % allProjects.length);
+              }}
+              title="Next (→)"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-all z-[100000] flex items-center justify-center text-2xl font-bold shadow-lg border border-white/20"
+            >
+              ›
+            </button>
 
-    <div className="flex flex-col items-center max-w-[30vw] max-h-[100vh] p-4">
-      <img
-        src={allProjects[enlargedIndex].image}
-        alt={allProjects[enlargedIndex].title}
-        className="w-full h-full object-contain rounded-lg shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-      />
-      {/* <div className="mt-4 text-center text-white bg-black/60 backdrop-blur-sm px-6 py-3 rounded-lg border border-white/20 max-w-[50vw]">
-        <h4 className="text-lg font-semibold">{allProjects[enlargedIndex].title}</h4>
-        <p className="text-sm text-gray-300 mt-1">{allProjects[enlargedIndex].description}</p>
-        <p className="text-xs text-gray-400 mt-2">
-          {enlargedIndex + 1} of {allProjects.length}
-        </p>
-      </div> */}
-    </div>
-  </div>
-)}
+            <div className="flex flex-col items-center max-w-[30vw] max-h-[100vh] p-4">
+              <img
+                src={allProjects[enlargedIndex].image}
+                alt={allProjects[enlargedIndex].title}
+                className="w-full h-full object-contain rounded-lg shadow-2xl"
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Secret Admin Login Modal */}
+        {showAdminLogin && (
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[100000]">
+            <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+              <h2 className="text-2xl font-bold mb-4">Admin Login</h2>
+              <input
+                type="password"
+                placeholder="Enter Admin Password"
+                value={adminPass}
+                onChange={(e) => setAdminPass(e.target.value)}
+                className="border p-2 w-full rounded mb-4"
+              />
+              <div className="flex justify-end gap-4">
+                <button
+                  onClick={() => setShowAdminLogin(false)}
+                  className="px-4 py-2 bg-gray-300 rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleLogin}
+                  className="px-4 py-2 bg-blue-600 text-white rounded"
+                >
+                  Login
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
