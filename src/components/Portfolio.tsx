@@ -27,7 +27,7 @@ const featuredProjects = [
     description: "Sophisticated gray cabinets with contemporary styling",
   },
   {
-    image: "/public/lovable-uploads/image_29.jpg",
+    image: "/lovable-uploads/image_29.jpg",
     title: "Curved Staircase Feature",
     category: "Interior",
     description: "Elegant curved design with white railings and wood floors",
