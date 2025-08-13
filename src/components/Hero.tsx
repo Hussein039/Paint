@@ -62,12 +62,9 @@ const Hero = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex items-center space-x-3 text-warm-white">
               <CheckCircle className="w-6 h-6 text-warm-accent flex-shrink-0" />
-              <span>Licensed & Insured</span>
+              <span>Licensed</span>
             </div>
-            <div className="flex items-center space-x-3 text-warm-white">
-              <CheckCircle className="w-6 h-6 text-warm-accent flex-shrink-0" />
-              <span>15+ Years Experience</span>
-            </div>
+            
             <div className="flex items-center space-x-3 text-warm-white">
               <CheckCircle className="w-6 h-6 text-warm-accent flex-shrink-0" />
               <span>Satisfaction Guaranteed</span>

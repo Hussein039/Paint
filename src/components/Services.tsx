@@ -23,12 +23,6 @@ const Services = () => {
       features: ["Office spaces", "Retail stores", "Warehouses", "Quick turnaround"]
     },
     {
-      icon: Brush,
-      title: "Specialty Finishes",
-      description: "Custom textures, faux finishes, and decorative painting techniques.",
-      features: ["Textured walls", "Faux finishes", "Decorative painting", "Custom designs"]
-    },
-    {
       icon: Shield,
       title: "Surface Preparation",
       description: "Thorough prep work ensures lasting, beautiful results for every project.",

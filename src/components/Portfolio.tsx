@@ -201,7 +201,6 @@ const Portfolio: React.FC = () => {
                       <div className="relative overflow-hidden rounded-lg">
                         <img
                           src={project.image}
-                          alt={project.title}
                           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300 rounded-lg"
                         />
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center rounded-lg">
@@ -212,7 +211,6 @@ const Portfolio: React.FC = () => {
                       </div>
                       <div className="p-3">
                         <h4 className="text-sm font-semibold truncate">
-                          {project.title}
                         </h4>
                         <span className="mt-1 text-xs inline-block bg-gray-200 rounded px-2 py-0.5 text-gray-600">
                           {project.category}
@@ -268,7 +266,6 @@ const Portfolio: React.FC = () => {
             <div className="flex flex-col items-center max-w-[30vw] max-h-[100vh] p-4">
               <img
                 src={allProjects[enlargedIndex].image}
-                alt={allProjects[enlargedIndex].title}
                 className="w-full h-full object-contain rounded-lg shadow-2xl"
                 onClick={(e) => e.stopPropagation()}
               />
