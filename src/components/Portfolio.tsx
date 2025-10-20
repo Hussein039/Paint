@@ -21,19 +21,19 @@ const featuredProjects = [
     description: "Clean lines with premium gray tile and modern fixtures",
   },
   {
-    image: "/lovable-uploads/e283cd60-5f94-427c-a67a-5cc385f4375e.png",
+    image: "/lovable-uploads/1.jpeg",
     title: "Modern Kitchen Design",
     category: "Interior",
     description: "Sophisticated gray cabinets with contemporary styling",
   },
   {
-    image: "/lovable-uploads/image_29.jpg",
+    image: "/lovable-uploads/6.jpeg",
     title: "Curved Staircase Feature",
     category: "Interior",
     description: "Elegant curved design with white railings and wood floors",
   },
   {
-    image: "/lovable-uploads/17c09118-4534-4f0a-8f18-cfe67cb5522b.png",
+    image: "/lovable-uploads/5.jpeg",
     title: "Custom Wall Paneling",
     category: "Interior",
     description: "Sophisticated paneling design with warm neutral tones",
@@ -41,17 +41,10 @@ const featuredProjects = [
 ];
 
 const extraProjects = Array.from({ length: 100 }, (_, i) => ({
-  image: i % 2 === 0
-    ? `/lovable-uploads/image_${i + 1}.jpg`
-    : `/lovable-uploads/${i + 1}.jpeg`,
+  image: `/lovable-uploads/${i + 1}.jpeg`,
   category: "Interior",
-  description: "Professional painting and finishing project showcasing quality craftsmanship",
+  description: `Professional painting and finishing project showcasing quality craftsmanship`,
 }));
-
-
-
-
-
 
 const allProjects = [...featuredProjects, ...extraProjects];
 
