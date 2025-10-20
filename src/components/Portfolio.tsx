@@ -40,11 +40,18 @@ const featuredProjects = [
   },
 ];
 
-const extraProjects = Array.from({ length: 38 }, (_, i) => ({
-  image: `/lovable-uploads/image_${i + 1}.jpg`,
+const extraProjects = Array.from({ length: 100 }, (_, i) => ({
+  image: i % 2 === 0
+    ? `/lovable-uploads/image_${i + 1}.jpg`
+    : `/lovable-uploads/${i + 1}.jpeg`,
   category: "Interior",
-  description: `Professional painting and finishing project showcasing quality craftsmanship`,
+  description: "Professional painting and finishing project showcasing quality craftsmanship",
 }));
+
+
+
+
+
 
 const allProjects = [...featuredProjects, ...extraProjects];
 
