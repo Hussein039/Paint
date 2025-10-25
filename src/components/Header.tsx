@@ -61,9 +61,9 @@ const Header = () => {
               <Phone className="w-4 h-4 text-accent" />
               <span>(647) 571-0231</span>
             </div>
-            <Button variant="hero" size="sm">
+            {/* <Button variant="hero" size="sm">
               Get Quote
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>
